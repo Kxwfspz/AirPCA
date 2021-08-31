@@ -116,13 +116,7 @@ end
 finalF = sum(sum((Y-W*W'*Y).^2));
 
 end
-% for iter = 1:IterNum
-% Gra = 2*(-2*R_sum + R_sum*W*W' + W*W'*R_sum)*W;
-% W = W - 0.001*Gra;
-% graCount(iter)=sum(sum(abs(Gra).^2));
-% F_count(iter) = sum(sum((X'-W*W'*X').^2));
-% remain = W'*W-I;
-% end
+
 
 
 
@@ -147,12 +141,6 @@ hold on
 x_count = 1:IterNum;
 plot(x_count, test_svd_count,'-.','linewidth',1.5);                         % Error on testset (centralized)
 
-% x_count = 1:IterNum;
-% plot(x_count, F_count,'linewidth',1.5);
-% hold on
-% 
-% x_count = 1:IterNum;
-% plot(x_count, svd_count,'-.','linewidth',1.5);
 
 legend('AirPCA with Power Control','Centralized PCA');
 xlabel('Number of Rounds')
@@ -160,25 +148,4 @@ ylabel('PCA Error')
 grid on
 axis([0 1000 0 45])
 
-% % figure;
-% % x_count = 1:IterNum;
-% % plot(x_count, Pt*0.3981/1000, x_count, F_count, x_count, svd_count,'linewidth',1.5);
-% % legend('Gradient Norm','Loss-NGD','Loss-SVD')
-% % grid on
-% % %title('FPCA via gradient descent without noise £¨\eta=0.005£©')
-% % xlabel('Number of Iterations')
-% % ylabel('Function Loss & Gradient Norm')
-% % axis([0 1000 0 45])
-% 
-figure;
-[AX,H1,H2]=plotyy(x_count, F_count,x_count, 10*log10(Pt*0.3981),'plot');
-set(get(AX(1),'Ylabel'),'String','Function Loss');
-set(H1,'linewidth',1.5);
-set(get(AX(2),'Ylabel'),'String','Transmit Power (dBm)');
-set(H2,'linewidth',0.8);
-grid on
-xlabel('Number of Iterations');
-hold on
-x_count = 1:IterNum;
-plot(x_count, svd_count,'-.','linewidth',1.5);
-legend('Adaptive Power Control','Ideal PCA','Transmit Power (dBm)');
+
