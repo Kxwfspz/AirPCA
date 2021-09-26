@@ -3,7 +3,6 @@ clc
 
 load('AR_data.mat');
 
-
  D=4800;
  d=10;
  M=D*d;

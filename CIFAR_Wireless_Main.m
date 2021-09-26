@@ -4,9 +4,9 @@ clc
 %% Import Data
 load('data_batch_1.mat');
 
-D=3072;
-d=10;
-M=D*d;
+D=3072;                                                                                    %Dimension
+d=10;                                                                                      %Reduced Dimension                                 
+M=D*d;                                                                                     %Vector Dimension
  
 IterNum = 200;                                                                             %number of iterations
 %epsilon = 0.0002;
@@ -38,24 +38,26 @@ R_sum = Y* Y';                                                                  
 %% Gradient Descent
 %W = [eye(d)';zeros(D-d,d)];                                                               % Begin with identity matrix
 %W = randn(D,d)/sqrt(D);                                                                   % Begin with a random matrix
-W = U(:,51:51+d-1);                                                                        % Begin with a saddle point
-graCount = zeros(1,IterNum);
-F_count = zeros(1,IterNum);                  
-test_F_count = zeros(1,IterNum);                                                           %For test
+W = U(:,51:51+d-1);                                                                        % Begin with a saddle point (To show the effectiveness)
+graCount = zeros(1,IterNum);                                                               % Gradient norm
+F_count = zeros(1,IterNum);                   
+test_F_count = zeros(1,IterNum);                                                           % Error Function (for test)
 svd_count=ones(1,IterNum)*standard;
 test_svd_count=ones(1,IterNum)*test_standard;
 power_count=ones(1,IterNum)*10*log10(1000*0.3981);
 
-
 countC=0; 
+
 for iter = 1:IterNum
 
-Y_t=Y-Y;
-UserInvolve=userSize;
+Y_t = Y - Y;                                                                              
+
+UserInvolve=userSize;                                                                      
+
 for i=1:userSize
     randomValue=(randn(1)^2+randn(1)^2)/sqrt(2);
     if randomValue < ThresholdG
-       Y_t(:,(i-1)*dataSize/userSize+1:i*dataSize/userSize)=0;                              %just silence this user
+       Y_t(:,(i-1)*dataSize/userSize+1:i*dataSize/userSize)=0;                              %just silence this user (a simple approach)
        UserInvolve=UserInvolve-1;
     else
         a=ceil(rand(1,30)*dataSize/userSize);
@@ -100,22 +102,11 @@ end
 %W = W - 0.001*Gra;
 F_count(iter) = sum(sum((Y-W*W'*Y).^2));
 test_F_count(iter) = sum(sum((testY-W*W'*testY).^2));                                       %PCA error
-remain = W'*W-I;                                                                            %deviation
-
-
+remain = W'*W-I;                                                                            %deviation (from constraint)
 
 end
 
 finalF = sum(sum((Y-W*W'*Y).^2));
-
-% for iter = 1:IterNum
-% Gra = 2*(-2*R_sum + R_sum*W*W' + W*W'*R_sum)*W;
-% W = W - 0.001*Gra;
-% graCount(iter)=sum(sum(abs(Gra).^2));
-% F_count(iter) = sum(sum((X'-W*W'*X').^2));
-% remain = W'*W-I;
-% end
-
 
 
 %% Figure
